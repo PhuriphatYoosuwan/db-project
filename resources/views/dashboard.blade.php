@@ -30,8 +30,12 @@
       <h5 class="mb-3">Categories</h5>
 
       @php
-        // ถ้ามาจาก DB ให้ใช้ $categories (ต้องมี fields: name, slug)
-        // ถ้าไม่มี ให้ fallback เป็นรายการด้านล่าง
+        // ใช้หมวดจาก DB ถ้ามี (ต้องมี name, slug)
+        $fromDb = isset($categories) && count($categories)
+          ? collect($categories)->map(fn($c) => ['name'=>$c->name, 'slug'=>$c->slug])
+          : collect();
+
+        // fallback ถ้ายังไม่มีข้อมูลใน DB
         $fallback = collect([
           ['name'=>'Bags','slug'=>'bags'],
           ['name'=>'Pets','slug'=>'pets'],
@@ -48,8 +52,9 @@
           ['name'=>'Camping','slug'=>'camping'],
           ['name'=>'Computer','slug'=>'computer'],
         ]);
-        $cats = isset($categories) && count($categories) ? collect($categories)->map(fn($c)=>['name'=>$c->name,'slug'=>$c->slug]) : $fallback;
-      @endphp>
+
+        $cats = $fromDb->isNotEmpty() ? $fromDb : $fallback;
+      @endphp
 
       @if($cats->isEmpty())
         <div class="alert alert-light border">ยังไม่มีหมวดหมู่</div>
