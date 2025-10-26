@@ -26,10 +26,9 @@
                                 <h5 class="mb-3">Categories</h5>
                                 <div class="d-flex flex-row-reverse flex-wrap gap-2">
                                     @foreach ($categories as $category)
-                                        <div class="p-2 border rounded bg-light text-center">
-                                            {{ $category->name }}
-                                        </div>
+                                        <a href="{{ url('/category/'.$category->id) }}">{{ $category->name }}</a>
                                     @endforeach
+
                                 </div>
                             </div>
                         </div>
