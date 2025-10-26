@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
     // return view('welcome');
@@ -21,6 +22,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/shop', [ShopController::class, 'index'])->name('shop');
     Route::resource('categories', CategoryController::class);
+    Route::get('/category/{id}', [ProductController::class, 'showByCategory']);
 });
 
 require __DIR__.'/auth.php';
