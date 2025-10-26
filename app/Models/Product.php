@@ -12,12 +12,15 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    // helper แสดงราคาเป็นบาท (มีทศนิยม 2 ตำแหน่ง)
+    // Helper แสดงราคาเป็นบาท (มีทศนิยม 2 ตำแหน่ง)
     public function getPriceBahtAttribute(): string {
         return number_format($this->price_cents / 100, 2);
     }
 
+    // Helper คืน URL รูปสินค้า
     public function getImageUrlAttribute(): string {
-        return $this->image_path ? asset('storage/'.$this->image_path) : asset('images/placeholder.png');
+        return $this->image_path
+            ? asset('storage/'.$this->image_path)
+            : asset('images/placeholder.png');
     }
 }
