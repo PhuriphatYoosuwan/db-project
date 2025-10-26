@@ -22,6 +22,9 @@ class User extends Authenticatable
         'email',
         'password',
         'profile_photo',
+        'phone',
+        'gender',
+        'birthdate',
     ];
 
     /**
@@ -44,6 +47,21 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'birthdate' => 'date',
         ];
+    }
+    public function getProfilePhotoAttribute($value)
+    {
+        return $value ?: 'default.png';
+    }
+
+    public function address()
+    {
+        return $this->hasOne(Address::class);
+    }
+
+    public function creditCard()
+    {
+        return $this->hasOne(CreditCard::class);
     }
 }
