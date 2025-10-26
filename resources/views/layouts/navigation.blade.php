@@ -5,17 +5,31 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                    <a>
+                        <h1 class="text-white">Shopping</h1>
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                <!-- Full-width Search bar -->
+                <div class="hidden sm:flex sm:items-center sm:w-full px-4">
+                    <form method="GET" class="flex items-center w-full">
+                        <input 
+                            type="text" 
+                            name="q" 
+                            placeholder="Search..."
+                            value="{{ request('q') }}"
+                            class="flex-1 border border-gray-300 rounded-l-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        >
+                        <button 
+                            type="submit"
+                            class="bg-indigo-600 text-white px-4 py-2 rounded-r-lg hover:bg-indigo-700 transition"
+                        >
+                            🔍
+                        </button>
+                    </form>
                 </div>
+
+
             </div>
 
             <!-- Settings Dropdown -->
