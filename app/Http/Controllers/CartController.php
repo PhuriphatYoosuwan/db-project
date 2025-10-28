@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Order;
+use App\Models\OrderItem;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -39,5 +42,42 @@ class CartController extends Controller
             session()->put('cart', $cart);
         }
         return redirect()->back()->with('success', 'Product removed from cart!');
+    }
+
+    public function checkout()
+    {
+        $cart = session()->get('cart', []);
+        if(empty($cart)) {
+            return redirect()->back()->with('error', 'Your cart is empty!');
+        }
+
+        $products = Product::whereIn('id', array_keys($cart))->get();
+
+        // คำนวณรวม
+        $total = 0;
+        foreach($products as $product){
+            $total += $product->price * $cart[$product->id];
+        }
+
+        // สร้าง order
+        $order = Order::create([
+            'user_id' => Auth::id(),
+            'total' => $total,
+        ]);
+
+        // สร้าง order items
+        foreach($products as $product){
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $product->id,
+                'quantity' => $cart[$product->id],
+                'price' => $product->price,
+            ]);
+        }
+
+        // ล้าง cart
+        session()->forget('cart');
+
+        return redirect()->route('cart.index')->with('success', 'Checkout completed!');
     }
 }
