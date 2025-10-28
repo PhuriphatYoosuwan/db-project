@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\CartController;
 
 Route::get('/', function () {
     // return view('welcome');
@@ -26,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/photo/{filename}', [UserController::class, 'showProfilePhoto'])
         ->where('filename', '.*')
         ->name('user.photo');
+
     Route::get('/address', [AddressController::class, 'edit'])->name('address.edit');
     Route::patch('/address', [AddressController::class, 'update'])->name('address.update');
     Route::get('/credit-card', [App\Http\Controllers\CreditCardController::class, 'edit'])->name('credit.edit');
@@ -39,6 +41,10 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('reviews', ReviewController::class);
     Route::get('/product/{productId}/reviews', [ReviewController::class, 'reviewsByProduct'])->name('reviews.byProduct');
+
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+    Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
 });
 
 require __DIR__.'/auth.php';

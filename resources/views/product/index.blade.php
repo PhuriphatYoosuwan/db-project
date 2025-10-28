@@ -6,7 +6,22 @@
             @if($product->image)
                 <img src="{{ asset('storage/images/' . $product->image) }}" alt="{{ $product->name }}" width="150">
             @endif
-            <a href="#" id="add-review-btn" class="inline-block mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">Add Review</a>
+
+            {{-- ปุ่ม Add Review --}}
+            <a href="#" id="add-review-btn" class="inline-block mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">
+                Add Review
+            </a>
+
+            {{-- ปุ่ม Add to Cart --}}
+            <form action="{{ route('cart.add') }}" method="POST" class="inline-block ml-2">
+                @csrf
+                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                <button 
+                    type="submit"
+                    class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded text-white">
+                    🛒 Add to Cart
+                </button>
+            </form>
         </div>
     </div>
 
@@ -45,7 +60,7 @@
         </div>
     </div>
 
-    {{-- ฟอร์มรีวิว (ซ่อนโดย default) --}}
+    {{-- ฟอร์มรีวิว --}}
     <div id="review-form" class="hidden mb-6">
         <form action="{{ route('reviews.store') }}" method="POST" class="space-y-2">
             @csrf
