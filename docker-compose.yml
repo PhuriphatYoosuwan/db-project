@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  laravel.test:
+    build:
+      context: ./docker/8.3
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "5173:5173"
+    environment:
+      LARAVEL_SAIL: 1
+      WWWGROUP: '${WWWGROUP}'
+      WWWUSER: '${WWWUSER}'
+    volumes:
+      - '.:/var/www/html'
+    networks:
+      - sail
+    depends_on:
+      - mysql
+
+  mysql:
+    image: 'mysql/mysql-server:8.0'
+    ports:
+      - '3307:3306' # ✅ เปลี่ยน port ด้านนอกเป็น 3307
+    environment:
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_DATABASE: '${DB_DATABASE}'
+      MYSQL_USER: '${DB_USERNAME}'
+      MYSQL_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    volumes:
+      - 'sailmysql:/var/lib/mysql'
+    networks:
+      - sail
+
+networks:
+  sail:
+    driver: bridge
+
+volumes:
+  sailmysql:
+    driver: local
+

@@ -6,6 +6,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\CreditCard;
+use App\Models\Address;
+
 
 class User extends Authenticatable
 {
@@ -21,6 +24,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_photo',
+        'phone',
+        'gender',
+        'birthdate',
     ];
 
     /**
@@ -43,8 +50,24 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'birthdate' => 'date',
         ];
     }
+    public function getProfilePhotoAttribute($value)
+    {
+        return $value ?: 'default.png';
+    }
+
+    public function address()
+    {
+        return $this->hasOne(Address::class);
+    }
+
+    public function creditCard()
+    {
+        return $this->hasOne(CreditCard::class);
+    }
+    
 
     public function reviews()
     {
