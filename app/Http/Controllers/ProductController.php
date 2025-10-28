@@ -17,8 +17,11 @@ class ProductController extends Controller
         return view('category.index', compact('categories','category', 'products'));
     }
 
-    // public function showCategory() {
-    //     $categories = Category::all(); // ดึงข้อมูลหมวดหมู่ทั้งหมด
-    //     return view('category.index', compact('categories'));
-    // }
+    public function show($id)
+    {
+        $categories = Category::all();
+        $product = Product::findOrFail($id); // ดึงตาม id
+
+        return view('product.index', compact('categories','product'));
+    }
 }
