@@ -2,7 +2,7 @@
   {{-- คอนเทนเนอร์หลัก มีระยะห่างขอบรอบ ๆ --}}
   <div class="max-w-6xl mx-auto px-6 py-8 text-white">
 
-    {{-- Breadcrumb --}}
+    <!-- {{-- Breadcrumb --}}
     <div class="text-sm text-gray-400 mb-4">
       <a href="{{ route('shop') }}" class="hover:underline">Shop</a>
       <span class="mx-2">›</span>
@@ -31,7 +31,7 @@
                 </button>
             </form>
         </div>
-    </div>
+    </div> -->
 
     {{-- Product Section --}}
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -85,6 +85,16 @@
            class="inline-block mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white shadow hover:shadow-md transition">
           Add Review
         </a>
+
+        <form action="{{ route('cart.add') }}" method="POST" class="inline-block ml-2">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product->id }}">
+            <button 
+                type="submit"
+                class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded text-white">
+                🛒 Add to Cart
+            </button>
+        </form>
       </div>
     </div>
 
