@@ -24,6 +24,12 @@
                     </div>
                 @endforeach
             </div>
+            <form action="{{ route('cart.checkout') }}" method="POST" class="mt-4 text-right">
+                @csrf
+                <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">
+                    Checkout
+                </button>
+            </form>
 
             {{-- รวมราคาทั้งหมด --}}
             @php
