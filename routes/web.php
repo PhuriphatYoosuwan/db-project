@@ -23,6 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/shop', [ShopController::class, 'index'])->name('shop');
     Route::resource('categories', CategoryController::class);
     Route::get('/category/{id}', [ProductController::class, 'showByCategory']);
+    Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 });
 
 require __DIR__.'/auth.php';
