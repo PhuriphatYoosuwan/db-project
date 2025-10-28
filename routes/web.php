@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 
 Route::get('/', function () {
     // return view('welcome');
@@ -21,9 +22,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/shop', [ShopController::class, 'index'])->name('shop');
+
     Route::resource('categories', CategoryController::class);
     Route::get('/category/{id}', [ProductController::class, 'showByCategory']);
     Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
+
+    Route::resource('reviews', ReviewController::class);
+    Route::get('/product/{productId}/reviews', [ReviewController::class, 'reviewsByProduct'])->name('reviews.byProduct');
 });
 
 require __DIR__.'/auth.php';

@@ -20,8 +20,12 @@ class ProductController extends Controller
     public function show($id)
     {
         $categories = Category::all();
-        $product = Product::findOrFail($id); // ดึงตาม id
+        $product = Product::findOrFail($id);
+        $reviews = $product->reviews()->with('user')->latest()->get();
 
-        return view('product.index', compact('categories','product'));
+        // คำนวณคะแนนเฉลี่ย
+        $averageRating = $reviews->avg('rating'); // จะได้ค่า 1-5 หรือ null ถ้าไม่มีรีวิว
+
+        return view('product.index', compact('categories','product','reviews','averageRating'));
     }
 }
