@@ -42,17 +42,19 @@
         </div>
     </div>
 
-    <h1 class="text-white">{{ $category->name }}</h1>
+    <!-- <h1 class="text-white">{{ $category->name }}</h1> -->
 
     <div class="text-white products">
         @foreach ($products as $product)
-            <div class="product-card">
-                <h2>{{ $product->name }}</h2>
-                <p>Price: {{ $product->price }}</p>
-                @if($product->image)
-                <img src="{{ asset('storage/images/' . $product->image) }}" alt="{{ $product->name }}" width="150">
-                @endif
-            </div>
+            <a href="{{ route('product.show', $product->id) }}" class="product-card block text-white no-underline">
+                <div>
+                    <h2>{{ $product->name }}</h2>
+                    <p>Price: {{ $product->price }}</p>
+                    @if($product->image)
+                        <img src="{{ asset('storage/images/' . $product->image) }}" alt="{{ $product->name }}" width="150">
+                    @endif
+                </div>
+            </a>
         @endforeach
     </div>
 </x-app-layout>
