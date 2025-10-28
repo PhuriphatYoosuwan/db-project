@@ -29,12 +29,13 @@
                         >
                             🔍
                         </button>
-                        <button 
+                        <a 
+                            href="{{ route('cart.index') }}"
                             type="button"
                             class="ml-3 text-white text-3xl hover:scale-110 transition flex items-center justify-center"
                         >
                             🛒
-                        </button>
+                        </a>
                     </form>
                 </div>
             </div>

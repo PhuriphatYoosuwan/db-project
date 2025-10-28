@@ -9,9 +9,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
+
 class ProfileController extends Controller
 {
+    public function show()
+        {
+            return view('profile.show');
+        }
+    
     /**
+    
      * Display the user's profile form.
      */
     public function edit(Request $request): View
@@ -57,4 +64,8 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+
+
+
 }

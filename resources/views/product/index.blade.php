@@ -7,6 +7,30 @@
       <a href="{{ route('shop') }}" class="hover:underline">Shop</a>
       <span class="mx-2">›</span>
       <span class="text-gray-300">{{ $product->name }}</span>
+    <div class="text-white products">
+        <div class="product-card">
+            <h2>{{ $product->name }}</h2>
+            <p>Price: {{ $product->price }}</p>
+            @if($product->image)
+                <img src="{{ asset('storage/images/' . $product->image) }}" alt="{{ $product->name }}" width="150">
+            @endif
+
+            {{-- ปุ่ม Add Review --}}
+            <a href="#" id="add-review-btn" class="inline-block mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">
+                Add Review
+            </a>
+
+            {{-- ปุ่ม Add to Cart --}}
+            <form action="{{ route('cart.add') }}" method="POST" class="inline-block ml-2">
+                @csrf
+                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                <button 
+                    type="submit"
+                    class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded text-white">
+                    🛒 Add to Cart
+                </button>
+            </form>
+        </div>
     </div>
 
     {{-- Product Section --}}
@@ -73,6 +97,14 @@
       <form action="{{ route('reviews.store') }}" method="POST" class="space-y-4">
         @csrf
         <input type="hidden" name="product_id" value="{{ $product->id }}">
+    {{-- ฟอร์มรีวิว --}}
+    <div id="review-form" class="hidden mb-6">
+        <form action="{{ route('reviews.store') }}" method="POST" class="space-y-2">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product->id }}">
+            
+            <label class="block text-white">Rating (1-5)</label>
+            <input type="number" name="rating" min="1" max="5" required class="p-2 rounded text-black">
 
         {{-- Interactive star --}}
         <div>
