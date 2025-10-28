@@ -46,13 +46,13 @@
             </span>
           @endif
         </div>
-
+        <!-- 
         {{-- ปุ่มเพิ่มรีวิว --}}
         <a href="#review-form"
            id="add-review-btn"
            class="inline-block mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white shadow hover:shadow-md transition">
           Add Review
-        </a>
+        </a> -->
 
         <form action="{{ route('cart.add') }}" method="POST" class="inline-block ml-2">
             @csrf
