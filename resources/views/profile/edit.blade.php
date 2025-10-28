@@ -1,54 +1,34 @@
 <x-app-layout>
-  <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-      {{ __('Profile') }}
-    </h2>
-  </x-slot>
-
   <style>
-    .profile-wrapper {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 3rem;
-      flex-wrap: wrap;
-    }
-
-    .profile-form {
-      flex: 1 1 60%;
-      min-width: 320px;
-    }
-
-    .profile-photo {
-      flex: 1 1 35%;
-      min-width: 250px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
     @media (max-width: 768px) {
-      .profile-wrapper {
+      .profile-layout {
         flex-direction: column;
-        align-items: center;
       }
-      .profile-photo {
-        margin-top: 2rem;
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        border-right: none;
+        border-bottom: 1px solid #444;
       }
     }
   </style>
 
-  <div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-      <div class="p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-        <div class="profile-wrapper">
-          <div class="profile-form">
+  <div class="flex bg-gray-900 text-gray-100 min-h-screen">
+    {{-- ✅ Sidebar --}}
+    @include('layouts.sidebar')
+
+    {{-- ✅ เนื้อหา Profile --}}
+    <div class="flex-1 py-10 px-8">
+      <div class="max-w-5xl mx-auto bg-gray-800 shadow-lg rounded-2xl p-8">
+        <div class="flex flex-col md:flex-row gap-8">
+          {{-- ข้อมูลโปรไฟล์ --}}
+          <div class="flex-1">
             @include('profile.partials.update-profile-information-form')
           </div>
 
-          <div class="profile-photo">
+          {{-- รูปโปรไฟล์ --}}
+          <div class="w-full md:w-1/3 flex justify-center">
             @include('profile.partials.update-profile-photo-form')
           </div>
         </div>
