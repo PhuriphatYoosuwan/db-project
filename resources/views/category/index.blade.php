@@ -1,58 +1,55 @@
 <x-app-layout>
-      <div class="bg-white border border-gray-300 rounded-lg shadow-sm mt-8">
-        <div class="p-6">
-            <h5 class="mb-6 text-xl font-semibold text-gray-800 text-center">Categories</h5>
+    <div class="bg-gray-200 min-h-screen">
 
-            @php
-                // 🔹 Map ไอคอนตามชื่อหมวดหมู่
-                $icons = [
-                    'Bags' => '👜',
-                    'Pets' => '🐶',
-                    'Shoes' => '👟',
-                    'Gaming Gears' => '🎮',
-                    'Phone' => '📱',
-                    'Medicines' => '💊',
-                    'Shirts' => '👕',
-                    'Accessories' => '💍',
-                    'Furnitures' => '🪑',
-                    'Foods and Drinks' => '🍔',
-                    'Sports' => '⚽',
-                    'Campings' => '🏕️',
-                    'Computer' => '💻',
-                    'Phones' => '📱',
-                ];
-            @endphp
+        {{-- Main Content --}}
+        <div class="flex">
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 justify-items-center">
-                @foreach ($categories as $category)
-                    <a href="{{ url('/category/'.$category->id) }}"
-                    class="w-32 h-28 flex flex-col items-center justify-center border border-gray-300 
-                            rounded-xl bg-gray-50 hover:bg-gray-200 text-gray-800 text-sm font-medium 
-                            shadow-sm hover:shadow-md transition duration-200 ease-in-out cursor-pointer">
-                        {{-- ไอคอน --}}
-                        <div class="text-3xl mb-2">
-                            {{ $icons[$category->name] ?? '🛍️' }}
+            {{-- Sidebar Categories --}}
+            <aside class="w-1/5 bg-gray-200 p-6 text-gray-700">
+                <h2 class="text-lg font-semibold mb-4">Category</h2>
+                <ul class="space-y-2">
+                    @foreach ($categories as $category)
+                        <li>
+                            <a 
+                                href="{{ url('/category/'.$category->id) }}"
+                                class="block text-gray-600 hover:text-gray-900 transition"
+                            >
+                                {{ $category->name }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </aside>
+
+            {{-- Products Grid --}}
+            <main class="flex-1 p-8">
+                {{-- 2 columns for all screen sizes --}}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    @foreach ($products as $product)
+                        <div class="bg-white rounded-2xl shadow-md border border-gray-300 hover:shadow-xl transition overflow-hidden">
+                            {{-- Product Image --}}
+                            <div class="relative w-full h-72 bg-gray-100 flex items-center justify-center overflow-hidden">
+                                @if($product->image)
+                                    <img src="{{ asset('storage/images/' . $product->image) }}" 
+                                         alt="{{ $product->name }}" 
+                                         class="object-cover w-full h-full">
+                                @else
+                                    <span class="text-gray-400 text-sm">No Image</span>
+                                @endif
+                            </div>
+
+                            {{-- Product Info --}}
+                            <div class="p-4 flex flex-col items-center text-center">
+                                <h3 class="text-lg font-semibold text-gray-800 truncate w-full">{{ $product->name }}</h3>
+                                <p class="text-red-600 text-lg font-bold mt-1">฿{{ number_format($product->price, 2) }}</p>
+                                <button class="mt-3 bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">
+                                    Add to Cart
+                                </button>
+                            </div>
                         </div>
-
-                        {{-- ชื่อหมวดหมู่ --}}
-                        <span class="truncate text-center">{{ $category->name }}</span>
-                    </a>
-                @endforeach
-            </div>
+                    @endforeach
+                </div>
+            </main>
         </div>
-    </div>
-
-    <h1 class="text-white">{{ $category->name }}</h1>
-
-    <div class="text-white products">
-        @foreach ($products as $product)
-            <div class="product-card">
-                <h2>{{ $product->name }}</h2>
-                <p>Price: {{ $product->price }}</p>
-                @if($product->image)
-                <img src="{{ asset('storage/images/' . $product->image) }}" alt="{{ $product->name }}" width="150">
-                @endif
-            </div>
-        @endforeach
     </div>
 </x-app-layout>
