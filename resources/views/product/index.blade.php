@@ -7,5 +7,7 @@
                 <img src="{{ asset('storage/images/' . $product->image) }}" alt="{{ $product->name }}" width="150">
             @endif
         </div>
+        <a href="">add to cart</a>
     </div>
+    
 </x-app-layout>
