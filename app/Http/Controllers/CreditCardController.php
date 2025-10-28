@@ -25,34 +25,40 @@ class CreditCardController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'card_holder' => ['nullable', 'string', 'max:100'],
-            'card_number' => ['nullable', 'string', 'max:20'],
-            'expiry_date' => ['nullable', 'regex:/^\d{4}-(0[1-9]|1[0-2])$/'],
-            'cvv'         => ['nullable', 'string', 'max:4'],
+            'card_holder'   => ['nullable', 'string', 'max:100'],
+            'card_number'   => ['nullable', 'digits_between:13,19'],
+            'expiry_month'  => ['nullable', 'integer', 'min:1', 'max:12'],
+            'expiry_year'   => ['nullable', 'integer', 'min:' . date('Y')],
+            'cvv'           => ['nullable', 'digits_between:3,4'],
         ]);
 
         $user = Auth::user();
 
+        // ✅ รวม month + year เป็น expiry_date
+        $expiry_date = null;
+        if ($request->filled(['expiry_month', 'expiry_year'])) {
+            $expiry_date = sprintf('%04d-%02d', $request->expiry_year, $request->expiry_month);
+        }
+
         try {
-            // updateOrCreate() → ถ้ามีอยู่แล้วจะอัปเดต ถ้าไม่มีก็จะสร้างใหม่
+            dd($request->all());
             $user->creditCard()->updateOrCreate(
                 ['user_id' => $user->id],
                 [
                     'card_holder' => $request->card_holder,
                     'card_number' => $request->card_number,
-                    // 'expiry_date' => $request->expiry_date,
                     'expiry_date' => $expiry_date,
                     'cvv'         => $request->cvv,
                 ]
             );
 
             return redirect()->route('credit.edit')->with('status', 'credit-updated');
-
         } catch (\Exception $e) {
-            // ป้องกันปัญหา decrypt ผิด format
             return back()->withErrors([
                 'error' => 'เกิดข้อผิดพลาดในการบันทึกข้อมูลบัตร: ' . $e->getMessage()
             ]);
         }
     }
+
+
 }

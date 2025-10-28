@@ -14,7 +14,9 @@ class AddressController extends Controller
     public function edit()
     {
         $user = Auth::user();
-        $address = $user->address; // ดึงที่อยู่ของ user ถ้ามี
+
+        // ✅ ถ้า User ยังไม่มี address ให้ new() แทน null
+        $address = Address::firstOrNew(['user_id' => $user->id]);
 
         return view('profile.address', compact('user', 'address'));
     }
@@ -34,9 +36,9 @@ class AddressController extends Controller
 
         $user = Auth::user();
 
-        // ถ้ามี address อยู่แล้ว → update
-        // ถ้ายังไม่มี → create ใหม่
-        $user->address()->updateOrCreate(
+        // ✅ ปรับให้ใช้ Address::updateOrCreate โดยตรง แทนผ่าน relationship
+        // เพื่อความปลอดภัยและลด error ถ้า user->address ยังไม่มี
+        Address::updateOrCreate(
             ['user_id' => $user->id],
             [
                 'province' => $request->province,
@@ -47,6 +49,6 @@ class AddressController extends Controller
             ]
         );
 
-        return redirect()->route('address.edit')->with('status', 'address-updated');
+        return redirect()->route('address.edit')->with('status', '✅ Address updated successfully!');
     }
 }
