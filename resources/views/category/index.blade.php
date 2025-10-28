@@ -26,6 +26,7 @@
                 {{-- 2 columns for all screen sizes --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     @foreach ($products as $product)
+                    <a href="{{ route('product.show', $product->id) }}">
                         <div class="bg-white rounded-2xl shadow-md border border-gray-300 hover:shadow-xl transition overflow-hidden">
                             {{-- Product Image --}}
                             <div class="relative w-full h-72 bg-gray-100 flex items-center justify-center overflow-hidden">
@@ -47,6 +48,7 @@
                                 </button>
                             </div>
                         </div>
+                    </a>
                     @endforeach
                 </div>
             </main>
