@@ -44,5 +44,21 @@ class CreditCard extends Model
     {
         return $value ? Crypt::decryptString($value) : null;
     }
+
+    public function getMaskedCardNumberAttribute()
+    {
+        $num = $this->card_number;
+        return '**** **** **** ' . substr($num, -4);
+    }
+
+    public function getExpiryMonthAttribute()
+    {
+        return $this->expiry_date ? substr($this->expiry_date, 5, 2) : null;
+    }
+
+    public function getExpiryYearAttribute()
+    {
+        return $this->expiry_date ? substr($this->expiry_date, 0, 4) : null;
+    }
 }
 

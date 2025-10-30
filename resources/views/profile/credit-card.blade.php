@@ -35,7 +35,9 @@
           <label class="block text-sm text-gray-400">Card Number</label>
           <input type="text" name="card_number"
             value="{{ old('card_number', $creditCard->card_number ?? '') }}"
-            class="w-full mt-1 p-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring focus:ring-indigo-400/30">
+            inputmode="numeric" pattern="[0-9]*" maxlength="19"
+            class="w-full mt-1 p-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring focus:ring-indigo-400/30"
+            placeholder="Enter 16-digit number">
         </div>
 
         <div>

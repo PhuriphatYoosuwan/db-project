@@ -18,9 +18,22 @@ class Address extends Model
         'detail',
     ];
 
-    // ความสัมพันธ์กับ User (1:1)
+    /**
+     * ความสัมพันธ์กับ User (1:1)
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * รวมที่อยู่เป็นข้อความเดียว
+     */
+    public function getFullAddressAttribute()
+    {
+        // รวม detail ด้วยถ้ามี
+        $detail = $this->detail ? "{$this->detail}, " : '';
+        return "{$detail}{$this->sub_district}, {$this->district}, {$this->province} {$this->postal_code}";
+    }
+    
 }

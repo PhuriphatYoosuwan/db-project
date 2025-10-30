@@ -9,9 +9,9 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 
 Route::get('/', function () {
-    // return view('welcome');
     return redirect()->route('login');
 });
 
@@ -20,6 +20,8 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
+    // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -28,25 +30,32 @@ Route::middleware('auth')->group(function () {
         ->where('filename', '.*')
         ->name('user.photo');
 
-    Route::get('/address', [AddressController::class, 'edit'])->name('address.edit');
-    Route::patch('/address', [AddressController::class, 'update'])->name('address.update');
+    // Address
+    Route::get('/address/edit', [AddressController::class, 'edit'])->name('address.edit');
+    Route::patch('/address/update', [AddressController::class, 'update'])->name('address.update');
+
+    // Credit Card
     Route::get('/credit-card', [App\Http\Controllers\CreditCardController::class, 'edit'])->name('credit.edit');
     Route::patch('/credit-card', [App\Http\Controllers\CreditCardController::class, 'update'])->name('credit.update');
 
+    // Shop + Category + Product
     Route::get('/shop', [ShopController::class, 'index'])->name('shop');
-
     Route::resource('categories', CategoryController::class);
     Route::get('/category/{id}', [ProductController::class, 'showByCategory']);
     Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 
+    // Reviews
     Route::resource('reviews', ReviewController::class);
     Route::get('/product/{productId}/reviews', [ReviewController::class, 'reviewsByProduct'])->name('reviews.byProduct');
 
+    // Cart
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
     Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
-
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+
+    // (Optional) My Orders
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 });
 
 require __DIR__.'/auth.php';
