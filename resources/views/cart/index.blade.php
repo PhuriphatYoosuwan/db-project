@@ -2,33 +2,6 @@
     <div class="p-6">
         <h1 class="text-2xl font-bold mb-4 text-white">Your Cart</h1>
 
-        {{-- ✅ ที่อยู่จัดส่ง --}}
-        @if($address)
-            <div class="mb-6 p-4 bg-gray-800 rounded text-gray-200 shadow-md transition-transform hover:scale-[1.01]">
-                <h2 class="text-lg font-semibold mb-2">📍 Shipping Address</h2>
-                <p>{{ $address->detail ?? '' }}</p>
-                <p>{{ $address->sub_district ?? '' }}, {{ $address->district ?? '' }}</p>
-                <p>{{ $address->province ?? '' }} {{ $address->postal_code ?? '' }}</p>
-            </div>
-        @else
-            <div class="mb-6 p-4 bg-gray-800 rounded text-gray-400 italic">
-                ⚠️ No address on file.
-            </div>
-        @endif
-
-        {{-- ✅ ข้อมูลบัตรเครดิต --}}
-        @if($creditCard)
-            <div class="mb-6 p-4 bg-gray-800 rounded text-gray-200 shadow-md transition-transform hover:scale-[1.01]">
-                <h2 class="text-lg font-semibold mb-2">💳 Credit Card</h2>
-                <p><strong>Name:</strong> {{ $creditCard->card_holder }}</p>
-                <p><strong>Number:</strong> {{ $creditCard->masked_card_number ?? '**** **** **** ' . substr($creditCard->card_number, -4) }}</p>
-            </div>
-        @else
-            <div class="mb-6 p-4 bg-gray-800 rounded text-gray-400 italic">
-                ⚠️ No credit card info on file.
-            </div>
-        @endif
-
         {{-- ✅ สินค้าในตะกร้า --}}
         @if(count($products) > 0)
             <div class="space-y-4">
@@ -77,14 +50,16 @@
             </div>
 
             {{-- ✅ Checkout พร้อม SweetAlert --}}
-            <form id="checkoutForm" action="{{ route('cart.checkout') }}" method="POST" class="mt-6 text-right">
+            <form id="checkoutForm" action="{{ route('cart.order') }}" method="POST" class="mt-6 text-right">
                 @csrf
-                <button type="button"
-                    onclick="confirmCheckout()"
+                <button 
+                    type="submit"
                     class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-medium shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-95">
-                    🛍️ Checkout
+                    🛍️ Order
                 </button>
             </form>
+
+
 
             {{-- ✅ รวมราคาทั้งหมด --}}
             @php
@@ -107,14 +82,14 @@
     <script>
         function confirmCheckout() {
             Swal.fire({
-                title: '🛒 ยืนยันการสั่งซื้อสินค้าหรือไม่?',
-                text: "โปรดยืนยันว่าต้องการ Checkout สินค้าทั้งหมด",
+                title: '🛒 Confirm your purchase?',
+                text: "Please confirm that you want to checkout all items in your cart.",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#2563eb',
                 cancelButtonColor: '#ef4444',
-                confirmButtonText: 'ยืนยันการสั่งซื้อ',
-                cancelButtonText: 'ยกเลิก',
+                confirmButtonText: 'Confirm Purchase',
+                cancelButtonText: 'Cancel',
                 background: '#1f2937',
                 color: '#f9fafb',
                 customClass: {
@@ -123,8 +98,8 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     Swal.fire({
-                        title: '🎉 Checkout สำเร็จ!',
-                        text: 'ระบบจะพาคุณกลับไปยังหน้าร้านค้า',
+                        title: '🎉 Checkout Successful!',
+                        text: 'You will be redirected back to the store.',
                         icon: 'success',
                         timer: 2000,
                         showConfirmButton: false,
@@ -138,4 +113,5 @@
             });
         }
     </script>
+
 </x-app-layout>

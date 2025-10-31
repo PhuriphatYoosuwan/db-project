@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\CreditCard;
 use App\Models\Address;
-
+use App\Models\Order;
 
 class User extends Authenticatable
 {
@@ -68,13 +68,14 @@ class User extends Authenticatable
         return $this->hasOne(CreditCard::class);
     }
     
-
     public function reviews()
     {
         return $this->hasMany(Review::class);
     }
+
     public function orders()
     {
         return $this->hasMany(Order::class);
     }
+
 }
