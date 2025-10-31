@@ -107,14 +107,14 @@
     <script>
         function confirmCheckout() {
             Swal.fire({
-                title: '🛒 ยืนยันการสั่งซื้อสินค้าหรือไม่?',
-                text: "โปรดยืนยันว่าต้องการ Checkout สินค้าทั้งหมด",
+                title: '🛒 Confirm your purchase?',
+                text: "Please confirm that you want to checkout all items in your cart.",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#2563eb',
                 cancelButtonColor: '#ef4444',
-                confirmButtonText: 'ยืนยันการสั่งซื้อ',
-                cancelButtonText: 'ยกเลิก',
+                confirmButtonText: 'Confirm Purchase',
+                cancelButtonText: 'Cancel',
                 background: '#1f2937',
                 color: '#f9fafb',
                 customClass: {
@@ -123,8 +123,8 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     Swal.fire({
-                        title: '🎉 Checkout สำเร็จ!',
-                        text: 'ระบบจะพาคุณกลับไปยังหน้าร้านค้า',
+                        title: '🎉 Checkout Successful!',
+                        text: 'You will be redirected back to the store.',
                         icon: 'success',
                         timer: 2000,
                         showConfirmButton: false,
@@ -138,4 +138,5 @@
             });
         }
     </script>
+
 </x-app-layout>
