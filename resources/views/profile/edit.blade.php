@@ -16,6 +16,7 @@
 
   <div class="flex bg-gray-900 text-gray-100 min-h-screen">
     {{-- ✅ Sidebar --}}
+
     @include('layouts.sidebar')
 
     {{-- ✅ เนื้อหา Profile --}}
@@ -26,7 +27,7 @@
           <div class="flex-1">
             @include('profile.partials.update-profile-information-form')
           </div>
-
+          
           {{-- รูปโปรไฟล์ --}}
           <div class="w-full md:w-1/3 flex justify-center">
             @include('profile.partials.update-profile-photo-form')
