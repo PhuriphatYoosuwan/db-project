@@ -3,7 +3,6 @@
 
 @section('content')
 <div class="flex bg-gray-900 text-gray-100 min-h-screen">
-
   {{-- ✅ Sidebar --}}
   @include('layouts.sidebar')
 

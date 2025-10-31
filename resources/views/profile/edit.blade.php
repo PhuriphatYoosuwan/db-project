@@ -27,8 +27,8 @@
             @include('profile.partials.update-profile-information-form')
           </div>
 
-          {{-- รูปโปรไฟล์ --}}
-          <div class="w-full md:w-1/3 flex justify-center">
+          {{-- รูปโปรไฟล์ (ขยับลงมา) --}}
+          <div class="w-full md:w-1/3 flex justify-center items-start pt-5 md:pt-15">
             @include('profile.partials.update-profile-photo-form')
           </div>
         </div>
