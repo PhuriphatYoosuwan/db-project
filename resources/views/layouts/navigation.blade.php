@@ -13,30 +13,14 @@
                 </div>
 
                 <!-- 🧭 Full-width Search bar (เหมือนเดิมแต่บาลานซ์กับแถบใหม่) -->
-                <div class="flex items-center w-full">
-                    <form method="GET" class="flex items-center w-full">
-                        <input 
-                            type="text" 
-                            name="q" 
-                            placeholder="Search products..."
-                            value="{{ request('q') }}"
-                            class="flex-1 border border-[#4f4f52] rounded-l-lg px-4 py-3 
-                                   text-[16px] focus:outline-none focus:ring-2 focus:ring-[#eaeaea] text-black"
-                        >
-                        <button 
-                            type="submit"
-                            class="bg-black text-white px-5 py-3 rounded-r-lg font-semibold hover:bg-[#4f4f52] transition"
-                        >
-                            🔍
-                        </button>
-                        <a 
-                            href="{{ route('cart.index') }}"
-                            type="button"
-                            class="ml-3 text-white text-3xl hover:scale-110 transition flex items-center justify-center"
-                        >
-                            🛒
-                        </a>
-                    </form>
+                <div class="flex items-center justify-end w-full">
+                    <a 
+                        href="{{ route('cart.index') }}"
+                        type="button"
+                        class="text-white text-3xl hover:scale-110 transition flex items-center justify-center"
+                    >
+                        🛒
+                    </a>
                 </div>
             </div>
 
