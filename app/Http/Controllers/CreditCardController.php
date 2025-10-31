@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CreditCard;
+use App\Models\Order;
 
 class CreditCardController extends Controller
 {
@@ -16,7 +17,13 @@ class CreditCardController extends Controller
         $user = Auth::user();
         $creditCard = $user->creditCard; // ดึงข้อมูลบัตรจากความสัมพันธ์ 1:1
 
-        return view('profile.credit-card', compact('user', 'creditCard'));
+        $orders = Order::with(['items.product'])
+            ->where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+
+        return view('profile.credit-card', compact('user', 'creditCard'),compact('user', 'orders'));
     }
 
     /**
