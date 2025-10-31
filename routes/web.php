@@ -11,6 +11,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 
+
 Route::get('/', function () {
     // return view('welcome');
     return redirect()->route('login');
@@ -30,6 +31,8 @@ Route::middleware('auth')->group(function () {
         ->where('filename', '.*')
         ->name('user.photo');
 
+    
+    Route::get('/order-history', [ProfileController::class, 'showOrderHistory'])->name('order.history');
     Route::get('/address', [AddressController::class, 'edit'])->name('address.edit');
     Route::patch('/address', [AddressController::class, 'update'])->name('address.update');
     Route::get('/credit-card', [App\Http\Controllers\CreditCardController::class, 'edit'])->name('credit.edit');
