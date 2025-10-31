@@ -2,11 +2,11 @@
     <div class="p-6">
         <h1 class="text-2xl font-bold mb-6 text-white">🛒 Checkout</h1>
 
-        @if(session('checkout_success'))
+        <!-- @if(session('checkout_success'))
             <div class="mb-4 p-4 bg-green-600 text-white rounded shadow">
                 {{ session('checkout_success') }}
             </div>
-        @endif
+        @endif -->
 
                 {{-- ✅ ที่อยู่จัดส่ง --}}
         @if($address)
