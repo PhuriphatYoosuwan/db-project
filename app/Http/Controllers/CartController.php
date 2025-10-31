@@ -58,47 +58,53 @@ class CartController extends Controller
     }
 
     /**
-     * ทำการ Checkout
+     * Checkout the cart
      */
     public function checkout(Request $request)
     {
         $user = Auth::user();
         $cart = session()->get('cart', []);
 
-        // ✅ ตรวจสอบว่าตะกร้าว่างไหม
+        // ✅ Check if cart is empty
         if (empty($cart)) {
             return redirect()->back()->with('error', '⚠️ Your cart is empty!');
         }
 
-        // ดึงสินค้าทั้งหมดจากตะกร้า
+        // Fetch products in cart
         $products = Product::whereIn('id', array_keys($cart))->get();
 
-        // ✅ คำนวณราคารวม
+        // ✅ Calculate total price
         $total = 0;
         foreach ($products as $product) {
             $total += $product->price * $cart[$product->id];
         }
 
-        // ✅ สร้าง Order ใหม่
+        // ✅ Create a new order
         $order = Order::create([
             'user_id' => $user->id,
             'total'   => $total,
         ]);
 
-        // ✅ เพิ่มรายการสินค้าใน OrderItem
+        // ✅ Add order items and reduce stock_quantity
         foreach ($products as $product) {
+            $quantity = $cart[$product->id];
+
+            // Create OrderItem
             OrderItem::create([
-                'order_id'  => $order->id,
-                'product_id'=> $product->id,
-                'quantity'  => $cart[$product->id],
-                'price'     => $product->price,
+                'order_id'   => $order->id,
+                'product_id' => $product->id,
+                'quantity'   => $quantity,
+                'price'      => $product->price,
             ]);
+
+            // Reduce stock_quantity
+            $product->decrement('stock_quantity', $quantity);
         }
 
-        // ✅ ล้าง session cart หลัง checkout เสร็จ
+        // ✅ Clear the cart session
         session()->forget('cart');
 
-        // ✅ เด้งกลับไปหน้า shop พร้อมข้อความสำเร็จ
+        // ✅ Redirect to shop with success message
         return redirect()->route('shop')->with('checkout_success', '✅ Checkout completed successfully!');
     }
 
