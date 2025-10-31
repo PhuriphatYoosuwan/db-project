@@ -8,28 +8,28 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-
+use App\Models\Order;
 
 class ProfileController extends Controller
 {
-    public function show()
-        {
-            return view('profile.show');
-        }
-    
     /**
-    
-     * Display the user's profile form.
+     * แสดงหน้าโปรไฟล์ + ประวัติการสั่งซื้อ
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $user = $request->user();
+
+        // ✅ โหลดคำสั่งซื้อพร้อมรายการสินค้าและข้อมูลสินค้า
+        $orders = Order::with(['items.product'])
+            ->where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('profile.edit', compact('user', 'orders'));
     }
 
     /**
-     * Update the user's profile information.
+     * อัปเดตข้อมูลผู้ใช้
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
@@ -45,7 +45,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Delete the user's account.
+     * ลบบัญชีผู้ใช้
      */
     public function destroy(Request $request): RedirectResponse
     {
@@ -56,7 +56,6 @@ class ProfileController extends Controller
         $user = $request->user();
 
         Auth::logout();
-
         $user->delete();
 
         $request->session()->invalidate();
@@ -64,8 +63,4 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
-
-
-
-
 }

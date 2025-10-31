@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Address;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Order;
 
 class AddressController extends Controller
 {
@@ -16,7 +17,13 @@ class AddressController extends Controller
         $user = Auth::user();
         $address = $user->address; // ดึงที่อยู่ของ user ถ้ามี
 
-        return view('profile.address', compact('user', 'address'));
+        $orders = Order::with(['items.product'])
+            ->where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+
+        return view('profile.address', compact('user', 'address'),compact('user', 'orders'));
     }
 
     /**
