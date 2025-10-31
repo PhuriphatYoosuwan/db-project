@@ -10,18 +10,27 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    // แสดงสินค้าทั้งหมดใน cart
+    /**
+     * แสดงสินค้าทั้งหมดในตะกร้า
+     */
     public function index()
     {
+        $user = Auth::user();
         $cart = session()->get('cart', []); // [product_id => quantity]
 
-        // ดึงข้อมูล product จาก DB
+        // ดึงข้อมูลสินค้าในตะกร้า
         $products = Product::whereIn('id', array_keys($cart))->get();
 
-        return view('cart.index', compact('products', 'cart'));
+        // ดึงข้อมูล address และ credit card ของผู้ใช้
+        $address = $user->address;
+        $creditCard = $user->creditCard;
+
+        return view('cart.index', compact('products', 'cart', 'address', 'creditCard'));
     }
 
-    // เพิ่มสินค้า
+    /**
+     * เพิ่มสินค้าในตะกร้า
+     */
     public function add(Request $request)
     {
         $productId = $request->product_id;
@@ -29,55 +38,67 @@ class CartController extends Controller
         $cart[$productId] = ($cart[$productId] ?? 0) + 1;
         session()->put('cart', $cart);
 
-        return redirect()->route('cart.index')->with('success', 'Product added to cart!');
+        return redirect()->route('cart.index')->with('success', '✅ Product added to cart!');
     }
 
-    // ลบสินค้า
+    /**
+     * ลบสินค้าออกจากตะกร้า
+     */
     public function remove(Request $request)
     {
         $productId = $request->product_id;
         $cart = session()->get('cart', []);
-        if(isset($cart[$productId])){
+
+        if (isset($cart[$productId])) {
             unset($cart[$productId]);
             session()->put('cart', $cart);
         }
-        return redirect()->back()->with('success', 'Product removed from cart!');
+
+        return redirect()->back()->with('success', '🗑️ Product removed from cart!');
     }
 
-    public function checkout()
+    /**
+     * ทำการ Checkout
+     */
+    public function checkout(Request $request)
     {
+        $user = Auth::user();
         $cart = session()->get('cart', []);
-        if(empty($cart)) {
-            return redirect()->back()->with('error', 'Your cart is empty!');
+
+        // ✅ ตรวจสอบว่าตะกร้าว่างไหม
+        if (empty($cart)) {
+            return redirect()->back()->with('error', '⚠️ Your cart is empty!');
         }
 
+        // ดึงสินค้าทั้งหมดจากตะกร้า
         $products = Product::whereIn('id', array_keys($cart))->get();
 
-        // คำนวณรวม
+        // ✅ คำนวณราคารวม
         $total = 0;
-        foreach($products as $product){
+        foreach ($products as $product) {
             $total += $product->price * $cart[$product->id];
         }
 
-        // สร้าง order
+        // ✅ สร้าง Order ใหม่
         $order = Order::create([
-            'user_id' => Auth::id(),
-            'total' => $total,
+            'user_id' => $user->id,
+            'total'   => $total,
         ]);
 
-        // สร้าง order items
-        foreach($products as $product){
+        // ✅ เพิ่มรายการสินค้าใน OrderItem
+        foreach ($products as $product) {
             OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $product->id,
-                'quantity' => $cart[$product->id],
-                'price' => $product->price,
+                'order_id'  => $order->id,
+                'product_id'=> $product->id,
+                'quantity'  => $cart[$product->id],
+                'price'     => $product->price,
             ]);
         }
 
-        // ล้าง cart
+        // ✅ ล้าง session cart หลัง checkout เสร็จ
         session()->forget('cart');
 
-        return redirect()->route('cart.index')->with('success', 'Checkout completed!');
+        // ✅ เด้งกลับไปหน้า shop พร้อมข้อความสำเร็จ
+        return redirect()->route('shop')->with('checkout_success', '✅ Checkout completed successfully!');
     }
 }
