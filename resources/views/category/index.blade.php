@@ -42,19 +42,23 @@
                             {{-- Product Info --}}
                             <div class="p-4 flex flex-col items-center text-center">
                                 <h3 class="text-lg font-semibold text-gray-800 truncate w-full">{{ $product->name }}</h3>
+                                <p class="text-gray-700 text-sm mt-1">
+                                    {{ $product->stock_quantity > 0 ? 'In stock: '.$product->stock_quantity.' pcs' : 'Out of stock' }}
+                                </p>
                                 <p class="text-red-600 text-lg font-bold mt-1">฿{{ number_format($product->price, 2) }}</p>
                                 <!-- <button class="mt-3 bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">
                                     Add to Cart
                                 </button> -->
-                                <form action="{{ route('cart.add') }}" method="POST" class="inline-block ml-2">
-                                @csrf
-                                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                <button 
-                                    type="submit"
-                                    class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded text-white">
-                                    🛒 Add to Cart
-                                </button>
-                            </form>
+                                <form action="{{ route('cart.add') }}" method="POST" class="inline-block ml-2 mt-2">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <button 
+                                        type="submit"
+                                        class="px-4 py-2 rounded text-white {{ $product->stock_quantity > 0 ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-400 cursor-not-allowed' }}"
+                                        {{ $product->stock_quantity > 0 ? '' : 'disabled' }}>
+                                        🛒 Add to Cart
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </a>

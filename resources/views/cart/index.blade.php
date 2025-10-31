@@ -42,6 +42,27 @@
                                 <h2 class="font-semibold text-lg">{{ $product->name }}</h2>
                                 <p class="text-gray-300">Price: ${{ $product->price }}</p>
                                 <p class="text-gray-400 text-sm">Quantity: {{ $cart[$product->id] }}</p>
+                                 {{-- Quantity Controls --}}
+                                <div class="flex items-center space-x-2 mt-1">
+                                    {{-- Decrease --}}
+                                    <form action="{{ route('cart.updateQuantity') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" name="action" value="decrease">
+                                        <button type="submit" class="px-2 py-1 bg-gray-700 hover:bg-gray-600 rounded text-white font-bold">-</button>
+                                    </form>
+
+                                    {{-- Current Quantity --}}
+                                    <span class="px-2 py-1 bg-gray-800 rounded text-white">{{ $cart[$product->id] }}</span>
+
+                                    {{-- Increase --}}
+                                    <form action="{{ route('cart.updateQuantity') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" name="action" value="increase">
+                                        <button type="submit" class="px-2 py-1 bg-gray-700 hover:bg-gray-600 rounded text-white font-bold">+</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                         <form action="{{ route('cart.remove') }}" method="POST">

@@ -101,4 +101,27 @@ class CartController extends Controller
         // ✅ เด้งกลับไปหน้า shop พร้อมข้อความสำเร็จ
         return redirect()->route('shop')->with('checkout_success', '✅ Checkout completed successfully!');
     }
+
+    public function updateQuantity(Request $request)
+    {
+        $productId = $request->input('product_id');
+        $action = $request->input('action');
+
+        $cart = session()->get('cart', []);
+
+        if (!isset($cart[$productId])) {
+            return redirect()->back();
+        }
+
+        if ($action === 'increase') {
+            $cart[$productId]++;
+        } elseif ($action === 'decrease' && $cart[$productId] > 1) {
+            $cart[$productId]--;
+        }
+
+        session(['cart' => $cart]);
+
+        return redirect()->back();
+    }
+
 }
